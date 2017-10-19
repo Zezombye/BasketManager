@@ -1,5 +1,5 @@
 
-console.log("test");
+//console.log("test");
 
 var canvas = document.getElementById('mon_canvas'),
 context = canvas.getContext('2d');
