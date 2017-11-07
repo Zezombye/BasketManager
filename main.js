@@ -4,8 +4,6 @@
 var canvas = document.getElementById('mon_canvas'),
 context = canvas.getContext('2d');
 
-//alert(canvas);
-
 make_base();
 
 canvas.ondragstart = function(evt) {
