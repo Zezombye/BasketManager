@@ -5,7 +5,7 @@ var canvas = document.getElementById('mon_canvas'),
 context = canvas.getContext('2d');
 var drag = false;
 
-//make_base();
+//t'es con Timothée
 
 canvas.ondragstart = function(evt) {
     evt = evt || window.event;
