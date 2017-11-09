@@ -5,8 +5,6 @@ var canvas = document.getElementById('mon_canvas'),
 context = canvas.getContext('2d');
 var drag = false;
 
-//make_base();
-
 canvas.ondragstart = function(evt) {
     evt = evt || window.event;
     var x = evt.pageX,
