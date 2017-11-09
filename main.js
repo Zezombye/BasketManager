@@ -92,5 +92,3 @@ function mouseMove(e) {
 canvas.addEventListener('mousedown', mouseUp, false);
 canvas.addEventListener('mouseup', mouseDown, false);
 canvas.addEventListener('mousemove', mouseMove, false);
-
-
