@@ -4,10 +4,8 @@
 var canvas = document.getElementById('mon_canvas'),
 context = canvas.getContext('2d');
 var drag = false;
-<<<<<<< HEAD
 var joueurSelect = null;
-=======
->>>>>>> 388822074895607bfaada3587f3158cf754a8848
+var relativeX, relativeY;
 
 canvas.ondragstart = function(evt) {
     evt = evt || window.event;
@@ -73,8 +71,8 @@ function getJoueur(e) {
     console.log(joueurs[i].x + " " + x + " " + joueurs[i].width);
 
     if (joueurs[i].x <= x && joueurs[i].x+joueurs[i].width > x
-        //&& joueurs[i].y <= y && joueurs[i].y+joueurs[i].height > y
-        //&& (joueurSelect == null || joueurSelect.z < joueurs[i].z)
+        && joueurs[i].y <= y && joueurs[i].y+joueurs[i].height > y
+        && (joueurSelect == null || joueurSelect.z < joueurs[i].z)
         ) {
 
       joueurSelect = joueurs[i];
@@ -82,7 +80,7 @@ function getJoueur(e) {
     }
   }
 
-  console.log(joueurSelect);
+  //console.log(joueurSelect);
 
 }
 
@@ -92,11 +90,21 @@ function displayJoueurs() {
   }
 }
 
+function stopDrag(e) {
+  
+  drag = false;
+  joueurSelect.x = posX-relativeX;
+  joueurSelect.y = posY-relativeY; 
+}
+
 function mouseDown(e) {
+  var posX = e.pageX - canvas.offsetLeft;
+  var posY = e.pageY - canvas.offsetTop;
   drag = true;
   getJoueur(e);
-  if (joueurSelect == null) {
-    
+  if (joueurSelect != null) {
+    relativeX = posX-joueurSelect.x;
+    relativeY = posY-joueurSelect.y;
   }
 }
 
@@ -114,13 +122,9 @@ function mouseMove(e) {
     var posX = e.pageX - canvas.offsetLeft;
     var posY = e.pageY - canvas.offsetTop;
 
-    console.log("coords : "+posX + "," + posY);
+    console.log("coords : "+posX + "," + posY + " " + relativeX + " " + relativeY);
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    var relativeX = posX-joueurSelect.x;
-    var relativeY = posY-joueurSelect.y;
-    joueurSelect.x = relativeX;
-    joueurSelect.y = relativeY;
     joueurSelect.draw(posX-relativeX, posY-relativeY);
 
 
