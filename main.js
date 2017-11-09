@@ -55,6 +55,8 @@ j1 = new Joueur(100,100,1, ballonImg);
   }
 }*/
 
+joueurs = [j1];
+
 function drawBall(x, y) {
 	context.drawImage(base_image, x, y);
 }
@@ -86,6 +88,8 @@ function mouseMove(e) {
 
   }
 }
+
+
 
 canvas.addEventListener('mousedown', mouseDown, false);
 canvas.addEventListener('mouseup', mouseUp, false);
