@@ -133,7 +133,7 @@ function mouseMove(e) {
     if (joueurSelect == null) return;
     
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(basketCourt, 0, 0);
+    context.drawImage(basketCourt, 0, 0, canvas.width, canvas.height);
     var posX = e.pageX - canvas.offsetLeft;
     var posY = e.pageY - canvas.offsetTop;
 
