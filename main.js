@@ -4,10 +4,7 @@
 var canvas = document.getElementById('mon_canvas'),
 context = canvas.getContext('2d');
 var drag = false;
-<<<<<<< HEAD
 var joueurSelect = null;
-=======
->>>>>>> 388822074895607bfaada3587f3158cf754a8848
 
 canvas.ondragstart = function(evt) {
     evt = evt || window.event;
