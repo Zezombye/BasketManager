@@ -5,10 +5,7 @@ var canvas = document.getElementById('mon_canvas'),
 context = canvas.getContext('2d');
 var drag = false;
 var joueurSelect = null;
-<<<<<<< HEAD
-=======
 var relativeX, relativeY;
->>>>>>> 4ef1cdbbcba28b57e5cff5470419446462aee9b5
 
 canvas.ondragstart = function(evt) {
     evt = evt || window.event;
@@ -129,13 +126,6 @@ function mouseMove(e) {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     joueurSelect.draw(posX-relativeX, posY-relativeY);
-
-
-  	/*//context.drawImage(base_image, posX-125, posY-125);
-    joueurSelect.x = posX;
-    joueurSelect.y = posY;
-    joueurSelect.draw(x, y);
-    displayJoueurs();*/
 	
   }
 }
