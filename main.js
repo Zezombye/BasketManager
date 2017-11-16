@@ -7,6 +7,8 @@ var drag = false;
 var joueurSelect = null;
 var relativeX, relativeY;
 
+var basketCourt = new Image("basketcourt.png");
+
 canvas.ondragstart = function(evt) {
     evt = evt || window.event;
     var x = evt.pageX,
@@ -20,8 +22,15 @@ canvas.ondragover = function(evt) {
     var x = evt.clientX,
         y = evt.clientY;
 
-    console.log("dragover: "+x, y);
+    console.log("dragonvert: "+x, y);
 }
+
+canvas.load = function() {
+  console.log("test load");
+  context.drawImage(basketCourt, 0, 0);
+}
+
+canvas.load();
 
 //canvas.ondragover(console.log("test"));
 
@@ -41,6 +50,9 @@ function Joueur(x, y, z, img) {
 
   this.img.onload = this.draw(100, 100);
 
+}
+
+canvas.draw = function() {
 }
 
 ballonImg = new Image();
@@ -126,7 +138,7 @@ function mouseMove(e) {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     joueurSelect.draw(posX-relativeX, posY-relativeY);
-
+    context.drawImage(basketCourt, 0, 0);
 
   	/*//context.drawImage(base_image, posX-125, posY-125);
     joueurSelect.x = posX;
