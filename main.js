@@ -37,7 +37,7 @@ canvas.ondragover = function(evt) {
 
 canvas.load = function() {
   console.log("test load");
-  context.drawImage(basketCourt, 0, 0);
+  context.drawImage(basketCourt, 0, 0, canvas.width, canvas.height);
 }
 
 canvas.load();
