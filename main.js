@@ -8,14 +8,6 @@ var joueurSelect = null;
 var relativeX, relativeY;
 
 var basketCourt = new Image();
-basketcourt.onload = function()
-
-   {
-     basketcourt.src= ="basketcourt.png";
-     basketcourt.width = canvas.width;
-     basketcourt.height = canvas.height;
-
-   }
 basketCourt.src = "basketcourt.png";
 
 
