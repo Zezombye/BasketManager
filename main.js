@@ -7,7 +7,8 @@ var drag = false;
 var joueurSelect = null;
 var relativeX, relativeY;
 
-var basketCourt = new Image("basketcourt.png");
+var basketCourt = new Image();
+basketCourt.src = "basketcourt.png";
 
 canvas.ondragstart = function(evt) {
     evt = evt || window.event;
@@ -130,15 +131,15 @@ function mouseMove(e) {
     getJoueur(e);
     
     if (joueurSelect == null) return;
-
+    
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(basketCourt, 0, 0);
     var posX = e.pageX - canvas.offsetLeft;
     var posY = e.pageY - canvas.offsetTop;
 
     console.log("coords : "+posX + "," + posY + " " + relativeX + " " + relativeY);
-    context.clearRect(0, 0, canvas.width, canvas.height);
 
     joueurSelect.draw(posX-relativeX, posY-relativeY);
-    context.drawImage(basketCourt, 0, 0);
 
   	/*//context.drawImage(base_image, posX-125, posY-125);
     joueurSelect.x = posX;
