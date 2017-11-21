@@ -3,6 +3,8 @@
 
 var canvas = document.getElementById('mon_canvas'),
 context = canvas.getContext('2d');
+var upload = document.getElementById("upload");
+var uploadButton = document.getElementById("upload-button");
 var drag = false;
 var joueurSelect = null;
 var relativeX, relativeY;
@@ -10,6 +12,24 @@ var relativeX, relativeY;
 var basketCourt = new Image();
 basketCourt.src = "basketcourt.png";
 
+function parseFile(fileContent) {
+
+  //Parsage JSON
+  console.log(fileContent);
+
+}
+
+function uploadFile() {
+  //console.log("upload file");
+  var file = upload.files[0];
+
+  var read = new FileReader();
+  read.readAsBinaryString(file);
+
+  read.onloadend = function() {
+    parseFile(read.result);
+  }
+}
 
 canvas.ondragstart = function(evt) {
     evt = evt || window.event;
