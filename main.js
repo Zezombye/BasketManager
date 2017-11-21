@@ -3,6 +3,7 @@
 
 var canvas = document.getElementById('mon_canvas'),
 context = canvas.getContext('2d');
+var uploadButton = document.getElementById("upload-button");
 var drag = false;
 var joueurSelect = null;
 var relativeX, relativeY;
@@ -10,6 +11,9 @@ var relativeX, relativeY;
 var basketCourt = new Image();
 basketCourt.src = "basketcourt.png";
 
+function uploadFile() {
+  console.log("upload file");
+}
 
 canvas.ondragstart = function(evt) {
     evt = evt || window.event;
