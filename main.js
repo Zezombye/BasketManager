@@ -118,7 +118,8 @@ function mouseDown(e) {
   getJoueur(e);
   if (joueurSelect != null) {
     relativeX = posX-joueurSelect.x;
-    relativeY = posY-joueurSelect.y;
+    relativeY = posY-joueurSelect.y
+
   }
 }
 
