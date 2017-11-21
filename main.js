@@ -16,7 +16,13 @@ function parseFile(fileContent) {
 
   //Parsage JSON
   console.log(fileContent);
-
+  var content = JSON.parse(fileContent);
+  console.log(content);
+  console.log(content.joueurs[0].x);
+  console.log(content.joueurs[0].y);
+  console.log(content.joueurs[0].vecteurs[0]);
+  console.log(content.joueurs[0].vecteurs[1]);
+  console.log(content.joueurs[0].vecteurs[1].t);
 }
 
 function uploadFile() {
