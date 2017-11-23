@@ -196,3 +196,7 @@ for (var i = 0; i < 5; i++) {
   joueurs[i] = new Joueur(saveParDefaut.joueurs[i].x, saveParDefaut.joueurs[i].y, i, "joueur"+i+".png");
 
 }
+
+function export() {
+  
+}
