@@ -12,6 +12,7 @@ var relativeX, relativeY;
 var basketCourt = new Image();
 basketCourt.src = "basketcourt.png";
 
+
 function parseFile(fileContent) {
 
   //Parsage JSON
@@ -62,12 +63,13 @@ canvas.load();
 
 //canvas.ondragover(console.log("test"));
 
-function Joueur(x, y, z, img) {
+function Joueur(x, y, z, imgurl) {
 
   this.x=x;
   this.y=y;
   this.z=z;
-  this.img=img;
+  this.img=new Image();
+  this.img.src = imgurl;
   this.width = this.img.width;
   this.height = this.img.height;
 
@@ -86,7 +88,7 @@ canvas.draw = function() {
 ballonImg = new Image();
 ballonImg.src = "ballon.png";
 
-j1 = new Joueur(100,100,1, ballonImg);
+j1 = new Joueur(100,100,1, "ballon.jpeg");
 j2 = new Joueur(500, 300, 2, ballonImg);
 
 joueurs = [j1];
@@ -123,6 +125,8 @@ function getJoueur(e) {
   //console.log(joueurSelect);
 
 }
+
+
 
 function displayJoueurs() {
   for (var i = 0; i < joueurs.length; i++) {
@@ -180,3 +184,4 @@ canvas.addEventListener('mousedown', mouseDown, false);
 canvas.addEventListener('mouseup', mouseUp, false);
 canvas.addEventListener('mousemove', mouseMove, false);
 canvas.addEventListener('mouseout', mouseOut, false);
+
