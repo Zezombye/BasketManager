@@ -186,9 +186,9 @@ canvas.addEventListener('mousemove', mouseMove, false);
 canvas.addEventListener('mouseout', mouseOut, false);
 
 
-saveParDefaut = JSON.Parse('{"joueurs":[{"x":0.1,"y":0.33,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.3,"y":0.23,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.35,"y":0.48,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.18,"y":0.70,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.05,"y":0.86,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]}]}');
+saveParDefaut = JSON.parse('{"joueurs":[{"x":0.1,"y":0.33,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.3,"y":0.23,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.35,"y":0.48,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.18,"y":0.70,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.05,"y":0.86,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]}]}');
 
-for (int i = 0; i < 5; i++) {
+for (var i = 0; i < 5; i++) {
 
   joueurs[i] = new Joueur(saveParDefaut.joueurs[i].x, saveParDefaut.joueurs[i].y, i, "joueur"+i+".png");
 
