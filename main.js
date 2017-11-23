@@ -12,30 +12,8 @@ var basketCourt = new Image();
 basketCourt.src = "basketcourt.png";
 
 
-function parseFile(fileContent) {
 
-  //Parsage JSON
-  console.log(fileContent);
-  var content = JSON.parse(fileContent);
-  console.log(content);
-  console.log(content.joueurs[0].x);
-  console.log(content.joueurs[0].y);
-  console.log(content.joueurs[0].vecteurs[0]);
-  console.log(content.joueurs[0].vecteurs[1]);
-  console.log(content.joueurs[0].vecteurs[1].t);
-}
 
-function uploadFile() {
-  //console.log("upload file");
-  var file = upload.files[0];
-
-  var read = new FileReader();
-  read.readAsBinaryString(file);
-
-  read.onloadend = function() {
-    parseFile(read.result);
-  }
-}
 
 canvas.ondragstart = function(evt) {
     evt = evt || window.event;
@@ -185,13 +163,35 @@ canvas.addEventListener('mousemove', mouseMove, false);
 canvas.addEventListener('mouseout', mouseOut, false);
 
 
-saveParDefaut = JSON.parse('{"joueurs":[{"x":0.1,"y":0.33,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.3,"y":0.23,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.35,"y":0.48,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.18,"y":0.70,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.05,"y":0.86,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]}]}');
 
-for (var i = 0; i < 5; i++) {
+function parseFile(fileContent) {
 
-  joueurs[i] = new Joueur(saveParDefaut.joueurs[i].x, saveParDefaut.joueurs[i].y, i, "joueur"+(i+1)+".png");
+  var content = JSON.parse(fileContent);
+
+  saveParDefaut = JSON.parse('{"joueurs":[{"x":0.1,"y":0.33,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.3,"y":0.23,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.35,"y":0.48,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.18,"y":0.70,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.05,"y":0.86,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]}]}');
+
+  for (var i = 0; i < 5; i++) {
+
+    joueurs[i] = new Joueur(saveParDefaut.joueurs[i].x, saveParDefaut.joueurs[i].y, i, "joueur"+(i+1)+".png");
+
+  }
 
 }
+//Sauvegarde par défaut
+parseFile('{"joueurs":[{"x":0.1,"y":0.33,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.3,"y":0.23,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.35,"y":0.48,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.18,"y":0.70,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.05,"y":0.86,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]}]}');
+
+function uploadFile() {
+  //console.log("upload file");
+  var file = upload.files[0];
+
+  var read = new FileReader();
+  read.readAsBinaryString(file);
+
+  read.onloadend = function() {
+    parseFile(read.result);
+  }
+}
+
 
 function download(strData, strFileName, strMimeType) {
   var D = document,
