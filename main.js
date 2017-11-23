@@ -91,7 +91,7 @@ ballonImg.src = "ballon.png";
 j1 = new Joueur(100,100,1, "ballon.png");
 j2 = new Joueur(500, 300, 2, ballonImg);
 
-joueurs = [j1];
+joueurs = [];
 
 function drawBall(x, y) {
 	context.drawImage(base_image, x, y);
@@ -185,3 +185,11 @@ canvas.addEventListener('mouseup', mouseUp, false);
 canvas.addEventListener('mousemove', mouseMove, false);
 canvas.addEventListener('mouseout', mouseOut, false);
 
+
+saveParDefaut = JSON.Parse("");
+
+for (int i = 0; i < 5; i++) {
+
+  
+
+}
