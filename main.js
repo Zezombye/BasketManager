@@ -73,9 +73,9 @@ function Joueur(x, y, z, imgurl) {
   this.width = this.img.width;
   this.height = this.img.height;
 
-  this.draw = function(x, y) {
+  this.draw = function() {
     //console.log("dessin du joueur");
-    context.drawImage(this.img, x, y);
+    context.drawImage(this.img, this.x*canvas.width, this.y*canvas.height);
   }
 
   this.img.onload = this.draw(100, 100);
