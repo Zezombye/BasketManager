@@ -190,9 +190,30 @@ saveParDefaut = JSON.parse('{"joueurs":[{"x":0.1,"y":0.33,"vecteurs":[{"x":0.13,
 for (var i = 0; i < 5; i++) {
 
   joueurs[i] = new Joueur(saveParDefaut.joueurs[i].x, saveParDefaut.joueurs[i].y, i, "joueur"+(i+1)+".png");
-
 }
+
 function exportFile() {
   var fichier = JSON.stringify(joueurs);
-  fichier.CreateTextFile("pd.JSON",true);
+  fichier.SaveAs("HELp.JSON")
+  
+  var s = fichier.CreateTextFile("11.JSON", true);
+  s.WriteLine('Hello');
+  s.Close();
+}
+
+function download(fichier, text) {
+    console.log("TG");
+    var fichier = JSON.stringify(joueurs);
+    var pom = document.createElement('HELp');
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    pom.setAttribute('download', fichier);
+
+    if (document.createEvent) {
+        var event = document.createEvent('MouseEvents');
+        event.initEvent('click', true, true);
+        pom.dispatchEvent(event);
+    }
+    else {
+        pom.click();
+    }
 }
