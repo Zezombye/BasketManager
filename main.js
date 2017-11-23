@@ -86,12 +86,12 @@ canvas.draw = function() {
 }
 
 ballonImg = new Image();
-ballonImg.src = "ballon.jpeg";
+ballonImg.src = "ballon.png";
 
-//j1 = new Joueur(100,100,1, "ballon.jpeg");
-//j2 = new Joueur(500, 300, 2, ballonImg);
+j1 = new Joueur(100,100,1, "ballon.png");
+j2 = new Joueur(500, 300, 2, ballonImg);
 
-joueurs = [];]
+joueurs = [];
 
 function drawBall(x, y) {
 	context.drawImage(base_image, x, y);
