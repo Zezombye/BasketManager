@@ -192,28 +192,52 @@ for (var i = 0; i < 5; i++) {
   joueurs[i] = new Joueur(saveParDefaut.joueurs[i].x, saveParDefaut.joueurs[i].y, i, "joueur"+(i+1)+".png");
 }
 
-function exportFile() {
-  var fichier = JSON.stringify(joueurs);
-  fichier.SaveAs("HELp.JSON")
-  
-  var s = fichier.CreateTextFile("11.JSON", true);
-  s.WriteLine('Hello');
-  s.Close();
+function download(strData, strFileName, strMimeType) {
+  var D = document,
+      A = arguments,
+      a = D.createElement("a"),
+      d = A[0],
+      n = A[1],
+      t = A[2] || "text/plain";
+
+  //build download link:
+  a.href = "data:" + strMimeType + "charset=utf-8," + escape(strData);
+
+
+  if (window.MSBlobBuilder) { // IE10
+      var bb = new MSBlobBuilder();
+      bb.append(strData);
+      return navigator.msSaveBlob(bb, strFileName);
+  } /* end if(window.MSBlobBuilder) */
+
+
+
+  if ('download' in a) { //FF20, CH19
+      a.setAttribute("download", n);
+      a.innerHTML = "downloading...";
+      D.body.appendChild(a);
+      setTimeout(function() {
+          var e = D.createEvent("MouseEvents");
+          e.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+          a.dispatchEvent(e);
+          D.body.removeChild(a);
+      }, 66);
+      return true;
+  }; /* end if('download' in a) */
+
+
+
+  //do iframe dataURL download: (older W3)
+  var f = D.createElement("iframe");
+  D.body.appendChild(f);
+  f.src = "data:" + (A[2] ? A[2] : "application/octet-stream") + (window.btoa ? ";base64" : "") + "," + (window.btoa ? window.btoa : escape)(strData);
+  setTimeout(function() {
+      D.body.removeChild(f);
+  }, 333);
+  return true;
 }
 
-function download(fichier, text) {
-    console.log("TG");
-    var fichier = JSON.stringify(joueurs);
-    var pom = document.createElement('HELp');
-    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    pom.setAttribute('download', fichier);
+function exportFile() {
+  download(JSON.stringify(joueurs), "Jason.JSON", "text/plain");
 
-    if (document.createEvent) {
-        var event = document.createEvent('MouseEvents');
-        event.initEvent('click', true, true);
-        pom.dispatchEvent(event);
-    }
-    else {
-        pom.click();
-    }
 }
