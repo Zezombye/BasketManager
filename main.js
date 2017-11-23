@@ -55,7 +55,7 @@ function Joueur(x, y, z, imgurl) {
     context.drawImage(this.img, this.x*canvas.width, this.y*canvas.height);
   }
 
-  this.img.onload = this.draw(100, 100);
+  this.img.onload = this.draw();
 
 }
 
@@ -175,6 +175,8 @@ function parseFile(fileContent) {
     joueurs[i] = new Joueur(saveParDefaut.joueurs[i].x, saveParDefaut.joueurs[i].y, i, "joueur"+(i+1)+".png");
 
   }
+
+  displayJoueurs();
 
 }
 //Sauvegarde par défaut
