@@ -190,6 +190,6 @@ saveParDefaut = JSON.parse('{"joueurs":[{"x":0.1,"y":0.33,"vecteurs":[{"x":0.13,
 
 for (var i = 0; i < 5; i++) {
 
-  joueurs[i] = new Joueur(saveParDefaut.joueurs[i].x, saveParDefaut.joueurs[i].y, i, "joueur"+i+".png");
+  joueurs[i] = new Joueur(saveParDefaut.joueurs[i].x, saveParDefaut.joueurs[i].y, i, "joueur"+(i+1)+".png");
 
 }
