@@ -84,7 +84,7 @@ canvas.draw = function() {
 }
 
 ballonImg = new Image();
-ballonImg.src = "ballon.jpeg";
+ballonImg.src = "ballon.png";
 
 j1 = new Joueur(100,100,1, ballonImg);
 j2 = new Joueur(500, 300, 2, ballonImg);
