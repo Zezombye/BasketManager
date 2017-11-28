@@ -11,9 +11,9 @@ var relativeX, relativeY;
 var basketCourt = new Image();
 basketCourt.src = "basketcourt.png";
 
-
-
-
+var joueurs = [];
+var save = {};
+save.joueurs = joueurs;
 
 canvas.ondragstart = function(evt) {
     evt = evt || window.event;
@@ -60,6 +60,12 @@ function Joueur(x, y, z, imgurl) {
 }
 
 canvas.draw = function() {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.drawImage(basketCourt, 0, 0, canvas.width, canvas.height);
+
+  for (var i = 0; i < joueurs.length; i++) {
+    joueurs[i].draw();
+  }
 }
 
 ballonImg = new Image();
@@ -68,7 +74,6 @@ ballonImg.src = "ballon.png";
 j1 = new Joueur(100,100,1, "ballon.png");
 j2 = new Joueur(500, 300, 2, ballonImg);
 
-joueurs = [];
 
 function drawBall(x, y) {
 	context.drawImage(base_image, x, y);
@@ -99,17 +104,16 @@ function getJoueur(e) {
     }
   }
 
+  console.log(joueurSelect);
+
   //console.log(joueurSelect);
 
 }
 
 
 
-function displayJoueurs() {
-  for (var i = 0; i < joueurs.length; i++) {
-    joueurs[i].draw();
-  }
-}
+/*function displayJoueurs() {
+}*/
 
 function stopDrag(e) {
   
@@ -141,14 +145,16 @@ function mouseMove(e) {
     
     if (joueurSelect == null) return;
     
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(basketCourt, 0, 0, canvas.width, canvas.height);
+    
     var posX = e.pageX - canvas.offsetLeft;
     var posY = e.pageY - canvas.offsetTop;
 
     console.log("coords : "+posX + "," + posY + " " + relativeX + " " + relativeY);
 
-    joueurSelect.draw(posX-relativeX, posY-relativeY);
+    joueurSelect.x = posX - relativeX;
+    joueurSelect.y = posY - relativeY;
+
+    canvas.draw();
 	
   }
 }
@@ -175,9 +181,7 @@ function parseFile(fileContent) {
     joueurs[i] = new Joueur(content.joueurs[i].x, content.joueurs[i].y, i, "joueur"+(i+1)+".png");
 
   }
-  displayJoueurs();
-
-  displayJoueurs();
+  canvas.draw();
 
 }
 //Sauvegarde par défaut
@@ -242,6 +246,6 @@ function download(strData, strFileName, strMimeType) {
 }
 
 function exportFile() {
-  download(JSON.stringify(joueurs), "Jason.JSON", "text/plain");
+  download(JSON.stringify(save), "Jason.bskt", "text/plain");
 
 }
