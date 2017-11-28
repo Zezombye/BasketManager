@@ -4,6 +4,7 @@ var canvas = document.getElementById('mon_canvas'),
 context = canvas.getContext('2d');
 var upload = document.getElementById("upload");
 var uploadButton = document.getElementById("upload-button");
+var playButton = document.getElementById("play");
 var drag = false;
 var joueurSelect = null;
 var relativeX, relativeY;
@@ -199,6 +200,17 @@ function uploadFile() {
   }
 }
 
+function toggleAnimation(){
+  console.log("PD de Timo");
+  if (playButton.textContent == "Play") 
+   {
+       playButton.textContent = "Pause";
+   }
+   else 
+   {
+     playButton.textContent = "Play";
+   }
+}
 
 function download(strData, strFileName, strMimeType) {
   var D = document,
