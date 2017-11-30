@@ -203,7 +203,7 @@ function uploadFile() {
 }
 
 function sleep(ms) {
-  return new Promise(resolve => settout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function toggleAnimation(){
@@ -226,33 +226,32 @@ function timo(){
 }
 
 //Cette fonction altère les coordonnées x et y du joueur en fonction de t.
+function calcCoordsJoueur(joueur) {
 
-function calcCoordsJoueur(joueur1) {
-  var joueur1;
   var temp = t;
   var i = 0;
   while (true) {
 
-    if (temp >= joueur1.vecteurs[i].t) {
+    if (temp >= joueur.vecteurs[i].t) {
 
-      joueur1.x += joueur1.vecteurs[i].x;
-      joueur1.y += joueur1.vecteurs[i].y;
-      temp -= joueur1.vecteurs[i].t;
-      i++
+      joueur.x += joueur.vecteurs[i].x;
+      joueur.y += joueur.vecteurs[i].y;
+      temp -= joueur.vecteurs[i].t;
+      i++;
 
     } else {
 
       timo();
-      joueur1.x += (joueur1.vecteurs[i].x/joueur1.vecteurs[i].t)*temp; 
-      joueur1.y += (joueur1.vecteurs[i].y/joueur1.vecteurs[i].t)*temp;
+      joueur.x += (joueur.vecteurs[i].x/joueur.vecteurs[i].t)*temp; 
+      joueur.y += (joueur.vecteurs[i].y/joueur.vecteurs[i].t)*temp;
       return timo();
     }
   }
 }
 
 async function playAnimation(){
-  calcCoordsJoueur();
-  while(play==true)
+  calcCoordsJoueur(joueurs[0]);
+  while(play===true)
   {
     t+=10;
     await sleep(10);
