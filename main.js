@@ -5,6 +5,7 @@ context = canvas.getContext('2d');
 var upload = document.getElementById("upload");
 var uploadButton = document.getElementById("upload-button");
 var playButton = document.getElementById("play");
+var timeSlider = document.getElementById("time-slider");
 var drag = false;
 var joueurSelect = null;
 var relativeX, relativeY;
@@ -38,6 +39,10 @@ canvas.load = function() {
 }
 
 canvas.load();
+
+timeSlider.oninput = function() {
+  
+}
 
 //canvas.ondragover(console.log("test"));
 
