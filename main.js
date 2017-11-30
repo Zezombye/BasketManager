@@ -285,7 +285,7 @@ function download(strData, strFileName, strMimeType) {
       a.setAttribute("download", n);
       a.innerHTML = "downloading...";
       D.body.appendChild(a);
-      settout(function() {
+      setTimeout(function() {
           var e = D.createEvent("MouseEvents");
           e.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
           a.dispatchEvent(e);
@@ -300,7 +300,7 @@ function download(strData, strFileName, strMimeType) {
   var f = D.createElement("iframe");
   D.body.appendChild(f);
   f.src = "data:" + (A[2] ? A[2] : "application/octet-stream") + (window.btoa ? ";base64" : "") + "," + (window.btoa ? window.btoa : escape)(strData);
-  settout(function() {
+  setTimeout(function() {
       D.body.removeChild(f);
   }, 333);
   return true;
