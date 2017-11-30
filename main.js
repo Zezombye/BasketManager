@@ -5,10 +5,11 @@ context = canvas.getContext('2d');
 var upload = document.getElementById("upload");
 var uploadButton = document.getElementById("upload-button");
 var playButton = document.getElementById("play");
+var t = 0;
 var drag = false;
 var joueurSelect = null;
 var relativeX, relativeY;
-
+var play = false;
 var basketCourt = new Image();
 basketCourt.src = "basketcourt.png";
 
@@ -41,11 +42,12 @@ canvas.load();
 
 //canvas.ondragover(console.log("test"));
 
-function Joueur(x, y, z, imgurl) {
+function Joueur(x, y, z, imgurl, vecteurs) {
 
   this.x=x;
   this.y=y;
   this.z=z;
+  this.vecteurs=vecteurs;
   this.img=new Image();
   this.img.src = imgurl;
   this.width = this.img.width;
@@ -179,7 +181,7 @@ function parseFile(fileContent) {
   for (var i = 0; i < 5; i++) {
 
 
-    joueurs[i] = new Joueur(content.joueurs[i].x, content.joueurs[i].y, i, "joueur"+(i+1)+".png");
+    joueurs[i] = new Joueur(content.joueurs[i].x, content.joueurs[i].y, i, "joueur"+(i+1)+".png", content.joueurs[i].vecteurs);
 
   }
   canvas.draw();
@@ -200,17 +202,65 @@ function uploadFile() {
   }
 }
 
+function sleep(ms) {
+  return new Promise(resolve => settout(resolve, ms));
+}
+
 function toggleAnimation(){
-  console.log("PD de Timo");
+  timo();
   if (playButton.textContent == "Play") 
    {
-       playButton.textContent = "Pause";
+     playButton.textContent = "Pause";
+     play = true;
+     playAnimation();
    }
    else 
    {
      playButton.textContent = "Play";
+     play = false;
    }
 }
+
+function timo(){
+  console.log("PD de timo");
+}
+
+//Cette fonction altère les coordonnées x et y du joueur en fonction de t.
+
+function calcCoordsJoueur(joueur1) {
+  var joueur1;
+  var temp = t;
+  var i = 0;
+  while (true) {
+
+    if (temp >= joueur1.vecteurs[i].t) {
+
+      joueur1.x += joueur1.vecteurs[i].x;
+      joueur1.y += joueur1.vecteurs[i].y;
+      temp -= joueur1.vecteurs[i].t;
+      i++
+
+    } else {
+
+      timo();
+      joueur1.x += (joueur1.vecteurs[i].x/joueur1.vecteurs[i].t)*temp; 
+      joueur1.y += (joueur1.vecteurs[i].y/joueur1.vecteurs[i].t)*temp;
+      return timo();
+    }
+  }
+}
+
+async function playAnimation(){
+  calcCoordsJoueur();
+  while(play==true)
+  {
+    t+=10;
+    await sleep(10);
+    console.log(t);
+    timo();
+  }
+}
+
 
 function download(strData, strFileName, strMimeType) {
   var D = document,
@@ -236,7 +286,7 @@ function download(strData, strFileName, strMimeType) {
       a.setAttribute("download", n);
       a.innerHTML = "downloading...";
       D.body.appendChild(a);
-      setTimeout(function() {
+      settout(function() {
           var e = D.createEvent("MouseEvents");
           e.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
           a.dispatchEvent(e);
@@ -251,7 +301,7 @@ function download(strData, strFileName, strMimeType) {
   var f = D.createElement("iframe");
   D.body.appendChild(f);
   f.src = "data:" + (A[2] ? A[2] : "application/octet-stream") + (window.btoa ? ";base64" : "") + "," + (window.btoa ? window.btoa : escape)(strData);
-  setTimeout(function() {
+  settout(function() {
       D.body.removeChild(f);
   }, 333);
   return true;
