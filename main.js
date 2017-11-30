@@ -45,13 +45,16 @@ canvas.load();
 timeSlider.oninput = function() {
   t = timeSlider.value;
   timeDisplay.innerHTML = "t = "+t;
+  canvas.draw();
 }
 
 //canvas.ondragover(console.log("test"));
 
 function Joueur(x, y, z, imgurl, vecteurs) {
 
+  this.xinit=x;
   this.x=x;
+  this.yinit=y;
   this.y=y;
   this.z=z;
   this.vecteurs=vecteurs;
@@ -74,6 +77,7 @@ canvas.draw = function() {
   context.drawImage(basketCourt, 0, 0, canvas.width, canvas.height);
 
   for (var i = 0; i < joueurs.length; i++) {
+    calcCoordsJoueur(joueurs[i]);
     joueurs[i].draw();
   }
 }
@@ -236,6 +240,9 @@ function timo(){
 function calcCoordsJoueur(joueur) {
   var temp = t;
   var i = 0;
+  console.log(joueur);
+  joueur.x = joueur.xinit;
+  joueur.y = joueur.yinit;
   while (true) {
 
     if (temp >= joueur.vecteurs[i].t) {
