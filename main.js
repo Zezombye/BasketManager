@@ -40,14 +40,14 @@ canvas.ondragover = function(evt) {
 }
 
 canvas.load = function() {
-  console.log("bit loaded");
+  //console.log("bit loaded");
   context.drawImage(basketCourt, 0, 0, canvas.width, canvas.height);
 }
 
 canvas.load();
 
 timeSlider.oninput = function() {
-  t = timeSlider.value;
+  t = +timeSlider.value;
   timeDisplay.innerHTML = "t = "+t;
   canvas.draw();
 }
@@ -217,7 +217,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function toggleAnimation(){
+async function toggleAnimation(){
   
   if (playButton.textContent == "Play") 
    {
@@ -259,13 +259,13 @@ function calcCoordsJoueur(joueur) {
 }
 
 async function playAnimation(){
-  calcCoordsJoueur(joueurs[0]);
-  while(play===true)
-  {
-    t = t + 27;
-    await sleep(27);
-    //console.log(t);
+
+  while(play && t<10000) {
+    t += 25;
+    await sleep(25);
     canvas.draw();
+    timeSlider.value = t;
+    timeDisplay.innerHTML = "t = "+t;
   }
 }
 
