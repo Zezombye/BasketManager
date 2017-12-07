@@ -199,7 +199,7 @@ function parseFile(fileContent) {
 
 }
 //Sauvegarde par défaut
-parseFile('{"joueurs":[{"x":0.08,"y":0.23,"vecteurs":[{"x":0.13,"y":0,"t":2},{"x":0,"y":0.5,"t":5}]},{"x":0.23,"y":0.15,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.30,"y":0.43,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.23,"y":0.65,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.05,"y":0.70,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]}]}');
+parseFile('{"joueurs":[{"x":0.08,"y":0.23,"vecteurs":[{"x":0.13,"y":0,"t":2000},{"x":0,"y":0.5,"t":5000}]},{"x":0.23,"y":0.15,"vecteurs":[{"x":0.13,"y":0.15,"t":2500},{"x":0.3,"y":0.5,"t":5000}]},{"x":0.30,"y":0.43,"vecteurs":[{"x":0.13,"y":0.15,"t":2500},{"x":0.3,"y":0.5,"t":5000}]},{"x":0.23,"y":0.65,"vecteurs":[{"x":0.13,"y":0.15,"t":2500},{"x":0.3,"y":0.5,"t":5000}]},{"x":0.05,"y":0.70,"vecteurs":[{"x":0.13,"y":0.15,"t":2500},{"x":0.3,"y":0.5,"t":5000}]}]}');
 
 function uploadFile() {
   //console.log("upload file");
@@ -233,7 +233,7 @@ function toggleAnimation(){
 }
 
 function timo(){
-  console.log("timo le bg absolu");
+  console.log("timo le null");
 }
 
 //Cette fonction altère les coordonnées x et y du joueur en fonction de t.
@@ -266,10 +266,11 @@ async function playAnimation(){
   calcCoordsJoueur(joueurs[0]);
   while(play===true)
   {
-    t+=10;
-    await sleep(10);
+    t = t + 27;
+    await sleep(27);
     console.log(t);
     timo();
+    canvas.draw();
   }
 }
 
