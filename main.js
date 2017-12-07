@@ -218,7 +218,7 @@ function sleep(ms) {
 }
 
 function toggleAnimation(){
-  timo();
+  
   if (playButton.textContent == "Play") 
    {
      playButton.textContent = "Pause";
@@ -232,15 +232,12 @@ function toggleAnimation(){
    }
 }
 
-function timo(){
-  console.log("timo le null");
-}
 
 //Cette fonction altère les coordonnées x et y du joueur en fonction de t.
 function calcCoordsJoueur(joueur) {
   var temp = t;
   var i = 0;
-  console.log(joueur);
+  //console.log(joueur);
   joueur.x = joueur.xinit;
   joueur.y = joueur.yinit;
   while (joueur.vecteurs[i] != undefined) {
@@ -253,11 +250,10 @@ function calcCoordsJoueur(joueur) {
       i++;
 
     } else {
-
-      timo();
+      
       joueur.x += (joueur.vecteurs[i].x/joueur.vecteurs[i].t)*temp; 
       joueur.y += (joueur.vecteurs[i].y/joueur.vecteurs[i].t)*temp;
-      return timo();
+      return;
     }
   }
 }
@@ -268,8 +264,8 @@ async function playAnimation(){
   {
     t = t + 27;
     await sleep(27);
-    console.log(t);
-    timo();
+    //console.log(t);
+    
     canvas.draw();
   }
 }
