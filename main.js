@@ -2,8 +2,8 @@
 
 var canvas = document.getElementById('mon_canvas'),
 context = canvas.getContext('2d');
-var upload = document.getElementById("upload");
-var uploadButton = document.getElementById("upload-button");
+var uploadInput = document.getElementById("upload-input");
+//var uploadForm = document.getElementById("upload-form");
 var playButton = document.getElementById("play");
 var timeSlider = document.getElementById("time-slider");
 var timeDisplay = document.getElementById("time-value");
@@ -18,6 +18,10 @@ basketCourt.src = "basketcourt.png";
 var joueurs = [];
 var save = {};
 save.joueurs = joueurs;
+
+/*uploadInput.onchange = function() {
+  uploadForm.submit();
+}*/
 
 canvas.ondragstart = function(evt) {
     evt = evt || window.event;
@@ -124,8 +128,6 @@ function getJoueur(e) {
 
 }
 
-
-
 /*function displayJoueurs() {
 }*/
 
@@ -182,8 +184,6 @@ canvas.addEventListener('mouseup', mouseUp, false);
 canvas.addEventListener('mousemove', mouseMove, false);
 canvas.addEventListener('mouseout', mouseOut, false);
 
-
-
 function parseFile(fileContent) {
 
   var content = JSON.parse(fileContent);
@@ -199,11 +199,11 @@ function parseFile(fileContent) {
 
 }
 //Sauvegarde par défaut
-parseFile('{"joueurs":[{"x":0.08,"y":0.23,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.23,"y":0.15,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.30,"y":0.43,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.23,"y":0.65,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.05,"y":0.70,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]}]}');
+parseFile('{"joueurs":[{"x":0.08,"y":0.23,"vecteurs":[{"x":0.13,"y":0,"t":2},{"x":0,"y":0.5,"t":5}]},{"x":0.23,"y":0.15,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.30,"y":0.43,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.23,"y":0.65,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]},{"x":0.05,"y":0.70,"vecteurs":[{"x":0.13,"y":0.15,"t":2.5},{"x":0.3,"y":0.5,"t":5}]}]}');
 
 function uploadFile() {
   //console.log("upload file");
-  var file = upload.files[0];
+  var file = uploadInput.files[0];
 
   var read = new FileReader();
   read.readAsBinaryString(file);
@@ -233,7 +233,7 @@ function toggleAnimation(){
 }
 
 function timo(){
-  console.log("PD de timo");
+  console.log("timo le bg absolu");
 }
 
 //Cette fonction altère les coordonnées x et y du joueur en fonction de t.
@@ -243,7 +243,7 @@ function calcCoordsJoueur(joueur) {
   console.log(joueur);
   joueur.x = joueur.xinit;
   joueur.y = joueur.yinit;
-  while (true) {
+  while (joueur.vecteurs[i] != undefined) {
 
     if (temp >= joueur.vecteurs[i].t) {
 
