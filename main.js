@@ -47,7 +47,7 @@ canvas.load = function() {
 canvas.load();
 
 timeSlider.oninput = function() {
-  t = timeSlider.value;
+  t = +timeSlider.value;
   timeDisplay.innerHTML = "t = "+t;
   canvas.draw();
 }
@@ -217,7 +217,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function toggleAnimation(){
+async function toggleAnimation(){
   
   if (playButton.textContent == "Play") 
    {
@@ -259,12 +259,11 @@ function calcCoordsJoueur(joueur) {
 }
 
 async function playAnimation(){
-  calcCoordsJoueur(joueurs[0]);
-  while(play===true)
-  {
-    t = t + 27;
+
+  while(play) {
+    t += 27;
     await sleep(27);
-    //console.log(t);
+    console.log(t);
     
     canvas.draw();
   }
