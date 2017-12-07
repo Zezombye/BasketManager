@@ -265,7 +265,6 @@ async function playAnimation(){
     t = t + 27;
     await sleep(27);
     //console.log(t);
-    
     canvas.draw();
   }
 }
