@@ -8,6 +8,7 @@ var playButton = document.getElementById("play");
 var timeSlider = document.getElementById("time-slider");
 var timeDisplay = document.getElementById("time-value");
 var t = 0;
+var totalTime;
 var drag = false;
 var joueurSelect = null;
 var relativeX, relativeY;
@@ -185,19 +186,29 @@ canvas.addEventListener('mousemove', mouseMove, false);
 canvas.addEventListener('mouseout', mouseOut, false);
 
 function parseFile(fileContent) {
-
+  totalTime = 0;
+  console.log(totalTime);
   var content = JSON.parse(fileContent);
-
-
+  var max = 0
   for (var i = 0; i < 5; i++) {
-
-
+    for (var j=0; j<content.joueurs[i].vecteurs.length; j++){
+      totalTime += content.joueurs[0].vecteurs[j].t;
+    }
+    for (var y=0; y<content.joueurs[i].vecteurs.length; y++){
+      var wesh = content.joueurs[i].vecteurs[y].t;
+      if (max < wesh){
+        max = wesh;
+        
+      }
+    }
     joueurs[i] = new Joueur(content.joueurs[i].x, content.joueurs[i].y, i, "joueur"+(i+1)+".png", content.joueurs[i].vecteurs);
-
+    
   }
+  console.log(totalTime);
+  console.log(max);
   canvas.draw();
 
-}
+} 
 //Sauvegarde par défaut
 parseFile('{"joueurs":[{"x":0.08,"y":0.23,"vecteurs":[{"x":0.13,"y":0,"t":2000},{"x":0,"y":0.5,"t":5000}]},{"x":0.23,"y":0.15,"vecteurs":[{"x":0.13,"y":0.15,"t":2500},{"x":0.3,"y":0.5,"t":5000}]},{"x":0.30,"y":0.43,"vecteurs":[{"x":0.13,"y":0.15,"t":2500},{"x":0.3,"y":0.5,"t":5000}]},{"x":0.23,"y":0.65,"vecteurs":[{"x":0.13,"y":0.15,"t":2500},{"x":0.3,"y":0.5,"t":5000}]},{"x":0.05,"y":0.70,"vecteurs":[{"x":0.13,"y":0.15,"t":2500},{"x":0.3,"y":0.5,"t":5000}]}]}');
 
