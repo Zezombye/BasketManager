@@ -284,13 +284,14 @@ async function playAnimation(){
 function download(strData, strFileName, strMimeType) {
   var D = document,
       A = arguments,
-      a = D.createElement("a"),
+      b = D.createElement("a"),
+	  
       d = A[0],
       n = A[1],
       t = A[2] || "text/plain";
 
   //build download link:
-  a.href = "data:" + strMimeType + "charset=utf-8," + escape(strData);
+  b.href = "data:" + strMimeType + "charset=utf-8," + escape(strData);
 
 
   if (window.MSBlobBuilder) { // IE10
@@ -301,15 +302,15 @@ function download(strData, strFileName, strMimeType) {
 
 
 
-  if ('download' in a) { //FF20, CH19
-      a.setAttribute("download", n);
-      a.innerHTML = "downloading...";
-      D.body.appendChild(a);
+  if ('download' in b) { //FF20, CH19
+      b.setAttribute("download", n);
+      //b.innerHTML = "downloading...";
+      D.body.appendChild(b);
       setTimeout(function() {
           var e = D.createEvent("MouseEvents");
           e.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-          a.dispatchEvent(e);
-          D.body.removeChild(a);
+          b.dispatchEvent(e);
+          D.body.removeChild(b);
       }, 66);
       return true;
   }; /* end if('download' in a) */
