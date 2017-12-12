@@ -271,14 +271,18 @@ function calcCoordsJoueur(joueur) {
 }
 
 async function playAnimation(){
-
-  while(play && t<10000) {
-    t += 25;
-    await sleep(25);
+  var step = 25
+  while(play) {
+    t += step;
+    await sleep(step);
+    if (t>10000){
+      t=10000;
+    }
     canvas.draw();
     timeSlider.value = t;
     timeDisplay.innerHTML = "t = "+t;
   }
+
 }
 
 
