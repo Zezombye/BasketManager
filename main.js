@@ -5,6 +5,7 @@ context = canvas.getContext('2d');
 var uploadInput = document.getElementById("upload-input");
 //var uploadForm = document.getElementById("upload-form");
 var playButton = document.getElementById("play");
+var playLabel = document.getElementById("play-label");
 var timeSlider = document.getElementById("time-slider");
 var timeDisplay = document.getElementById("time-value");
 var t = 0;
@@ -230,15 +231,15 @@ function sleep(ms) {
 
 async function toggleAnimation(){
   
-  if (playButton.textContent == "Play") 
+  if (playLabel.textContent == "Play") 
    {
-     playButton.textContent = "Pause";
+     playLabel.textContent = "Pause";
      play = true;
      playAnimation();
    }
    else 
    {
-     playButton.textContent = "Play";
+     playLabel.textContent = "Play";
      play = false;
    }
 }
