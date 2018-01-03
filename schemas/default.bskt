@@ -1,0 +1,122 @@
+{
+    "maxTime": 10000,
+    "ballonTimeline": [
+        {
+            "joueur": -1,
+            "tStart": 0,
+            "tEnd": -1
+        }
+    ],
+    "joueurs": [
+        {
+            "xInit": 152,
+            "x": 152,
+            "yInit": 152,
+            "y": 152,
+            "id": 0,
+            "vecteurs": [],
+            "img": {},
+            "width": 101,
+            "height": 101
+        },
+        {
+            "xInit": 344,
+            "x": 344,
+            "yInit": 158,
+            "y": 158,
+            "id": 1,
+            "vecteurs": [],
+            "img": {},
+            "width": 101,
+            "height": 101
+        },
+        {
+            "xInit": 434,
+            "x": 434,
+            "yInit": 359,
+            "y": 359,
+            "id": 2,
+            "vecteurs": [],
+            "img": {},
+            "width": 101,
+            "height": 101
+        },
+        {
+            "xInit": 344,
+            "x": 344,
+            "yInit": 518,
+            "y": 518,
+            "id": 3,
+            "vecteurs": [],
+            "img": {},
+            "width": 101,
+            "height": 101
+        },
+        {
+            "xInit": 114,
+            "x": 114,
+            "yInit": 554,
+            "y": 554,
+            "id": 4,
+            "vecteurs": [],
+            "img": {},
+            "width": 101,
+            "height": 101
+        },
+        {
+            "xInit": 1127,
+            "x": 1127,
+            "yInit": 152,
+            "y": 152,
+            "id": 5,
+            "vecteurs": [],
+            "img": {},
+            "width": 101,
+            "height": 101
+        },
+        {
+            "xInit": 935,
+            "x": 935,
+            "yInit": 158,
+            "y": 158,
+            "id": 6,
+            "vecteurs": [],
+            "img": {},
+            "width": 101,
+            "height": 101
+        },
+        {
+            "xInit": 845,
+            "x": 845,
+            "yInit": 359,
+            "y": 359,
+            "id": 7,
+            "vecteurs": [],
+            "img": {},
+            "width": 101,
+            "height": 101
+        },
+        {
+            "xInit": 935,
+            "x": 935,
+            "yInit": 518,
+            "y": 518,
+            "id": 8,
+            "vecteurs": [],
+            "img": {},
+            "width": 101,
+            "height": 101
+        },
+        {
+            "xInit": 1165,
+            "x": 1165,
+            "yInit": 554,
+            "y": 554,
+            "id": 9,
+            "vecteurs": [],
+            "img": {},
+            "width": 101,
+            "height": 101
+        }
+    ]
+}

@@ -8,23 +8,41 @@
 	
 	
     <body>
-        <canvas id="mon_canvas" width="1280" height="720" 
-				draggable="true" ondrag="testdrag();">
-            Message pour les navigateurs ne supportant pas encore canvas.
-        </canvas>
-        <div id="buttons">
-			<label for="upload-input" id="upload-label" class="label-button">Importez un fichier .bskt</label>
-			<input type="file" id="upload-input" accept=".bskt" onchange="uploadFile()" style="display:none;"/>
+        <div id="container">
+			<canvas id="mon_canvas" width="1280" height="720" 
+					draggable="true" oncontextmenu="return false;">
+				Message pour les navigateurs ne supportant pas encore canvas.
+			</canvas>
+			<div id="container2">
+				<div id="buttons">
+					<label for="upload-input" id="upload-label" class="label-button">Importer un fichier .bskt</label>
+					<input type="file" id="upload-input" accept=".bskt" onchange="uploadFile()" style="display:none;"/>
+					
+					<label for="export-button" id="export-label" class="label-button">Exporter le fichier</label>
+					<button type="button" id="export-button" onclick="exportFile()"style="display:none;">exporter le fichier JSON</button>
+					
+					<label for="play" id="play-label" class="label-button">Play</label>
+					<button type="button" id="play" onclick="toggleAnimation()"style="display:none;">Play</button>
+					
+				</div>
+			</div>
+			<div id="container3">
+				<div id="info">
+					<input type="range" min="0" max="10000" value="0" class="slider" id="time-slider">
+					<span id="time-value">t = 0</span>
+				</div>
+			</div>
 			
-			<label for="export-button" id="export-label" class="label-button">Exporter le fichier</label>
-			<button type="button" id="export-button" onclick="exportFile()"style="display:none;">exporter le fichier Dyson</button>
-			
-			<label for="play" id="play-label" class="label-button">Play</label>
-			<button type="button" id="play" onclick="toggleAnimation()"style="display:none;">Play</button>
-			<br/>
-            <input type="range" min="0" max="10000" value="0" class="slider" id="time-slider">
-			<span id="time-value">t = 0</span>
+					<span>Vitesse : x</span>
+					<input id="input-vitesse" class="textfield" value="1">
+					<span>Temps max : </span>
+					<input id="time-max-input" class="textfield" value="10000"/>
 		</div>
+
+		
+		
+        <script src="main.js"></script>
+		
     </body>
 	
 	<style type="text/css">
@@ -32,10 +50,38 @@
 			border: 2px solid black;
 			display: block;
 			margin: auto;
+			
+		}
+		
+		input.textfield {
+			width: 50px;
+		}
+		div#container {
+			width: 1280px;
+			text-align: center;
+			margin: auto;
+			position: relative;
+		}
+		
+		#container2, #container3 {
+			width: 640px;
+			height:50px;
+		}
+		#container2 {
+			float: left;
+		}
+		#container3 {
+			float: right;
 		}
 		
 		div#buttons {
-			text-align: center;
+			float: right;
+			padding-top: 10px;
+		}
+		
+		div#info {
+			float: left;
+			padding-top: 10px;
 		}
 
         /*label#upload-label {
@@ -76,9 +122,9 @@
 			color: #000;
 			border-color: #444;
 		}
+		
     </style>
 	
 	
-        <script src="main.js"></script>
 	
 </html>

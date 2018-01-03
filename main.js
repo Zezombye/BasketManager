@@ -1,54 +1,48 @@
-//console.log("test");
+var CENTRE = -1;
+var PANIER_GAUCHE = -2;
+var PANIER_DROIT = -3;
 
 var canvas = document.getElementById('mon_canvas'),
 context = canvas.getContext('2d');
 var uploadInput = document.getElementById("upload-input");
 //var uploadForm = document.getElementById("upload-form");
+var container = document.getElementById("container");
 var playButton = document.getElementById("play");
 var playLabel = document.getElementById("play-label");
 var timeSlider = document.getElementById("time-slider");
 var timeDisplay = document.getElementById("time-value");
+var timeMaxInput = document.getElementById("time-max-input");
+var vitesseInput = document.getElementById("input-vitesse");
 var t = 0;
-var totalTime;
 var maxTime = 10000;
+var vitesse = 1;
 var drag = false;
 var joueurSelect = null;
+var joueurBallon = null;
 var relativeX, relativeY;
-var dragX, dragY, dragInitialT = 0;
+var dragX = -1, dragY = -1, dragInitialT = 0;
 var play = false;
 var basketCourt = new Image();
-basketCourt.src = "basketcourt.png";
+basketCourt.src = "images/basketcourt.png";
+basketCourt.onload = function() {
+	canvas.draw();
+}
+var ballonImg = new Image();
+ballonImg.src = "images/ballon.png";
+var ballonTimeline = [];
 
 var joueurs = [];
-var save = {};
-save.joueurs = joueurs;
 
-/*uploadInput.onchange = function() {
-	uploadForm.submit();
-}*/
-
-canvas.ondragstart = function(evt) {
-		evt = evt || window.event;
-		var x = evt.pageX,
-				y = evt.pageY;
-
-		console.log("dragstart: "+x, y);
-}
-
-canvas.ondragover = function(evt) {
-		evt = evt || window.event;
-		var x = evt.clientX,
-				y = evt.clientY;
-
-		console.log("dragonvert: "+x, y);
+canvas.onload = function() {
+	//console.log("bit loaded");
+	//context.drawImage(basketCourt, 0, 0, canvas.width, canvas.height);
+	canvas.draw();
 }
 
 canvas.load = function() {
-	//console.log("bit loaded");
-	context.drawImage(basketCourt, 0, 0, canvas.width, canvas.height);
+	canvas.onload();
 }
 
-canvas.load();
 
 function setTime(time) {
 	if (time < dragInitialT) {
@@ -58,110 +52,276 @@ function setTime(time) {
 	} else {
 		t = time;
 	}
+	t = Math.floor(t);
 	timeSlider.value = t;
-	timeDisplay.innerHTML = "t = "+t;
+	timeDisplay.innerHTML = "t = "+t+"/"+maxTime;
+	
+	joueurBallon = null;
+	for (var i = 0; i < ballonTimeline.length; i++) {
+		if (ballonTimeline[i].tStart <= t && (ballonTimeline[i].tEnd >= t || ballonTimeline[i].tEnd === -1)) {
+			joueurBallon = joueurs[ballonTimeline[i].joueur];
+		}
+	}
+	
 	canvas.draw();
+}
+
+function setMaxTime(time) {
+	if (!(time >= 1000 && time <= 1000000)) {
+		//alert("Le temps doit être entre 1 000 et 1 000 000");
+		return;
+	}
+	
+	maxTime = time;
+	timeSlider.max = time;
+	setTime(t);
 }
 
 timeSlider.oninput = function() {
 	setTime(+timeSlider.value);
 }
 
+/*timeMaxInput.onkeypress = function(e) {
+	if (e.keyCode === 13) {
+		setMaxTime(+timeMaxInput.value);
+	}
+}*/
+
+timeMaxInput.oninput = function(e) {
+	setMaxTime(+timeMaxInput.value);
+}
+
+/*vitesseInput.onkeypress = function(e) {
+	if (e.keyCode === 13) {
+		vitesse = +vitesseInput.value;
+		if (!(vitesse > 0)) {
+			alert("Vitesse invalide");
+			vitesse = 1;
+		}
+	}
+}*/
+vitesseInput.oninput = function(e) {
+	vitesse = +vitesseInput.value;
+	if (!(vitesse > 0)) {
+		//alert("Vitesse invalide");
+		vitesse = 1;
+	}
+}
+
+
 //canvas.ondragover(console.log("test"));
 
-function Joueur(x, y, z, imgurl, vecteurs) {
-
+function Joueur(x, y, id, imgurl, vecteurs) {
+	
 	this.xInit=x;
 	this.x=x;
 	this.yInit=y;
 	this.y=y;
-	this.z=z;
+	this.id=id;
 	this.vecteurs=vecteurs;
 	this.img=new Image();
 	this.img.src = imgurl;
 	this.width = this.img.width;
 	this.height = this.img.height;
 
-	this.draw = function() {
-		//console.log("dessin du joueur");
-		context.drawImage(this.img, this.x, this.y);
+	this.drawToCoords = function(x, y) {
+		context.drawImage(this.img, x-this.width/2, y-this.height/2);
 	}
+	
+	this.draw = function() {
+		this.drawToCoords(this.x, this.y);
+	}
+	
+	this.setCoords = function(coords) {
+		this.x = coords.x;
+		this.y = coords.y;
+	}
+}
 
-	this.img.onload = this.draw();
 
+function drawBallon(x, y) {
+	var ballonWidth = 75;
+	context.drawImage(ballonImg, x-ballonWidth/2, y-ballonWidth/2, ballonWidth, ballonWidth);
+}
+
+context.drawArrow = function(fromx, fromy, tox, toy) {
+	var headlen = 10;
+
+	var angle = Math.atan2(toy-fromy,tox-fromx);
+
+	//starting path of the arrow from the start square to the end square and drawing the stroke
+	context.beginPath();
+	context.moveTo(fromx, fromy);
+	context.lineTo(tox, toy);
+	context.strokeStyle = "#cc0000";
+	context.lineWidth = 15;
+	context.stroke();
+
+	//starting a new path from the head of the arrow to one of the sides of the point
+	context.beginPath();
+	context.moveTo(tox, toy);
+	context.lineTo(tox-headlen*Math.cos(angle-Math.PI/6),toy-headlen*Math.sin(angle-Math.PI/6));
+
+	//path from the side point of the arrow, to the other side point
+	context.lineTo(tox-headlen*Math.cos(angle+Math.PI/6),toy-headlen*Math.sin(angle+Math.PI/6));
+
+	//path from the side point back to the tip of the arrow, and then again to the opposite side point
+	context.lineTo(tox, toy);
+	context.lineTo(tox-headlen*Math.cos(angle-Math.PI/6),toy-headlen*Math.sin(angle-Math.PI/6));
+
+	//draws the paths created above
+	context.strokeStyle = "#cc0000";
+	context.lineWidth = 15;
+	context.stroke();
+	context.fillStyle = "#cc0000";
+	context.fill();
 }
 
 canvas.draw = function() {
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	context.drawImage(basketCourt, 0, 0, canvas.width, canvas.height);
-
+	
 	for (var i = 0; i < joueurs.length; i++) {
-		calcCoordsJoueur(joueurs[i]);
+		joueurs[i].setCoords(calcCoordsJoueur(joueurs[i], t));
+	}
+	
+	if (joueurBallon !== null) {
+		if (joueurSelect !== joueurBallon) {
+			drawBallon(joueurBallon.x, joueurBallon.y);
+			if (!play) {
+				context.lineWidth = 2;
+				context.strokeStyle = "rgba(73, 188, 255, 1)";
+				context.strokeRect(joueurBallon.x-joueurBallon.width/2, joueurBallon.y-joueurBallon.height/2, joueurBallon.width, joueurBallon.height);
+			}
+		}
+		
+	} else {
+		
+		var sender, receiver;
+		var tPasseStart, tPasseEnd;
+		
+		for (var i = 0; i < ballonTimeline.length; i++) {
+			if (ballonTimeline[i].tStart < t && ballonTimeline[i].tEnd < t) {
+				sender = joueurs[ballonTimeline[i].joueur];
+				tPasseStart = ballonTimeline[i].tEnd;
+			}
+			if (ballonTimeline[i].tStart > t) {
+				receiver = joueurs[ballonTimeline[i].joueur];
+				tPasseEnd = ballonTimeline[i].tStart;
+				break;
+			}
+		}
+		
+		if (sender !== undefined) {
+			if (receiver === undefined) {
+				context.globalAlpha = 0.4;
+				drawBallon(sender.x, sender.y);
+				context.globalAlpha = 1;
+				
+			} else {
+				
+				console.log("sender "+sender.id + " receiver "+receiver.id);
+				
+				senderCoords = calcCoordsJoueur(sender, tPasseStart);
+				receiverCoords = calcCoordsJoueur(receiver, tPasseEnd);
+				
+				drawBallon(senderCoords.x+(receiverCoords.x-senderCoords.x)*(t-tPasseStart)/(tPasseEnd-tPasseStart), senderCoords.y+(receiverCoords.y-senderCoords.y)*(t-tPasseStart)/(tPasseEnd-tPasseStart));
+			}
+		}
+	}
+	
+	for (var i = 0; i < joueurs.length; i++) {
 		if (joueurs[i] === joueurSelect) {
-			context.globalAlpha = 0.4;
+			context.globalAlpha = 0.5;
 			joueurs[i].draw();
+			if (joueurSelect === joueurBallon) {
+				drawBallon(joueurBallon.x, joueurBallon.y);
+			}
 			context.globalAlpha = 1;
 		} else {
 			joueurs[i].draw();
+			
 		}
 	}
 	
 	if (drag && joueurSelect !== null) {
 		//context.globalAlpha = 0.4;
-		context.drawImage(joueurSelect.img, dragX, dragY);
-		//context.globalAlpha = 1;
+		if (joueurSelect === joueurBallon) {
+			drawBallon(dragX, dragY);
+		}
+		joueurSelect.drawToCoords(dragX, dragY);
+		context.drawArrow(joueurSelect.x, joueurSelect.y, dragX, dragY);
+		var pxPerM = canvas.height/15;
+		var dist = Math.sqrt(Math.pow(Math.abs(joueurSelect.x-dragX),2)+Math.pow(Math.abs(joueurSelect.y-dragY),2));
+		var meters = dist/pxPerM;
+		var time = t-dragInitialT;
+		var text = (meters/time*1000).toFixed(3) + " m/s";
+		
+		context.fillStyle = "black";
+		context.font = "bold 16px Arial";
+		context.fillText(text, joueurSelect.x+(dragX-joueurSelect.x)/2-context.measureText(text).width/2, joueurSelect.y+(dragY-joueurSelect.y)/2+6);
 	}
+	
 }
 
-ballonImg = new Image();
-ballonImg.src = "ballon.png";
-
-j1 = new Joueur(100,100,1, "ballon.png");
-j2 = new Joueur(500, 300, 2, ballonImg);
-
-
-function drawBall(x, y) {
-	context.drawImage(base_image, x, y);
-}
-
-function testdrag() {
-	console.log("test drag");
-}
-
-//Détermine le joueur sur lequel la souris clique en fonction des coordonnées et du Z-index
+//Détermine le joueur sur lequel la souris clique en fonction des coordonnées et du Z-index (id)
 function getJoueur(e) {
-	var x = e.pageX - canvas.offsetLeft;
-	var y = e.pageY - canvas.offsetTop;
+	var x = e.pageX - container.offsetLeft;
+	var y = e.pageY - container.offsetTop;
 
-	joueurSelect = null;
+	result = null;
 
-	for (var i = 0; i < joueurs.length; i++) {
+	for (var i = -3; i < joueurs.length; i++) {
 
 		//console.log(joueurs[i].x + " " + x + " " + joueurs[i].width);
 
-		if (joueurs[i].x <= x && joueurs[i].x+joueurs[i].width > x
-				&& joueurs[i].y <= y && joueurs[i].y+joueurs[i].height > y
-				&& (joueurSelect === null || joueurSelect.z < joueurs[i].z)
+		if (joueurs[i].x-joueurs[i].width/2 <= x && joueurs[i].x+joueurs[i].width/2 > x
+				&& joueurs[i].y-joueurs[i].height/2 <= y && joueurs[i].y+joueurs[i].height/2 > y
+				&& (result === null || result.id < joueurs[i].id)
 				) {
 
-			joueurSelect = joueurs[i];
+			result = joueurs[i];
 		
 			//console.log("joueur sélectionné : "+i);
 		}
 	}
-
+	return result;
 
 	//console.log(joueurSelect);
 
 }
 
-/*function displayJoueurs() {
-}*/
 
 function stopDrag() {
 	
 	drag = false;
-	joueurSelect.vecteurs.add(
+	if (joueurSelect !== null && dragX !== -1 && dragY !== -1) {
+		
+		//On padde les vecteurs pour éviter qu'il y ait un trou dans la timeline
+		var sumT = 0;
+		for (var i = 0; i < joueurSelect.vecteurs.length; i++) {
+			sumT += joueurSelect.vecteurs[i].t;
+		}
+		if (sumT !== dragInitialT) {
+			joueurSelect.vecteurs.push({
+				x: 0,
+				y: 0,
+				t: dragInitialT-sumT
+			});
+		}
+		
+		if (t-dragInitialT !== 0 || joueurSelect.vecteurs.length === 0) {
+			joueurSelect.vecteurs.push({
+				x: dragX-joueurSelect.x,
+				y: dragY-joueurSelect.y,
+				t: t-dragInitialT
+			});
+		} else {
+			//On modifie le dernier vecteur
+			joueurSelect.vecteurs[joueurSelect.vecteurs.length-1].x += dragX-joueurSelect.x;
+			joueurSelect.vecteurs[joueurSelect.vecteurs.length-1].y += dragY-joueurSelect.y;
+		}
+	}
 	
 	joueurSelect = null;
 	canvas.draw();
@@ -169,20 +329,31 @@ function stopDrag() {
 }
 
 function mouseDown(e) {
-	var posX = e.pageX - canvas.offsetLeft;
-	var posY = e.pageY - canvas.offsetTop;
-	drag = true;
-	dragInitialT = t;
+	
 	console.log("mouse down");
-	getJoueur(e);
-	if (joueurSelect != null) {
+	
+	if (e.which === 1) {
+		
+		//Left click
+		
+		joueurSelect = getJoueur(e);
+		if (joueurSelect === null || joueurSelect.id < 0) return;
+		
+		var posX = e.pageX - container.offsetLeft;
+		var posY = e.pageY - container.offsetTop;
+		drag = true;
+		console.log(drag);
+		dragX = -1;
+		dragY = -1;
+		dragInitialT = t;
+		joueurSelect = getJoueur(e);
 		relativeX = posX-joueurSelect.x;
 		relativeY = posY-joueurSelect.y
 		
 		//On supprime les vecteurs postérieurs au temps du drag
 		var temp = 0;
 		var i;
-		for (i = 0; joueurSelect.vecteurs[i] !== undefined && temp+joueurSelect.vecteurs[i].t < t; i++) {
+		for (i = 0; joueurSelect.vecteurs[i] !== undefined && temp+joueurSelect.vecteurs[i].t <= t; i++) {
 			temp += joueurSelect.vecteurs[i].t;
 		}
 		//console.log("temp = "+temp);
@@ -203,6 +374,49 @@ function mouseDown(e) {
 			joueurSelect.vecteurs.splice(i, 1)
 		}
 		//console.log(joueurSelect.vecteurs);
+			
+		
+	} else if (e.which === 2 || e.which === 3) {
+		
+		//Right click
+		
+		joueurClicDroit = getJoueur(e);
+		
+		if (joueurClicDroit === null) return;
+		
+		if (joueurBallon === joueurClicDroit) {
+			joueurBallon = null;
+		} else if (joueurBallon === null || joueurBallon.id < 0) {
+			/*if (ballonTimeline.length > 0 && t - ballonTimeline[ballonTimeline.length-1].tEnd < 200) {
+				alert("Il faut au minimum 200 ms pour une passe !");
+				return;
+			}*/
+			joueurBallon = joueurClicDroit;
+		} else {
+			alert("Le joueur n°"+(joueurBallon.id+1)+" est toujours en possession de la balle !");
+			return;
+		}
+		
+		//On enlève le futur de la timeline
+		for (var i = 0; i < ballonTimeline.length; i++) {
+			if (ballonTimeline[i].tStart >= t) {
+				ballonTimeline.splice(i, 1);
+			}
+		}
+		
+		if (ballonTimeline.length > 0 && (ballonTimeline[ballonTimeline.length-1].tEnd === -1 || ballonTimeline[ballonTimeline.length-1].tEnd >= t)) {
+			ballonTimeline[ballonTimeline.length-1].tEnd = t-1;
+		}
+		
+		if (joueurBallon !== null) {
+			ballonTimeline.push({
+				joueur: joueurBallon.id,
+				tStart: t,
+				tEnd: -1
+			});
+		}
+		
+		console.log(ballonTimeline);
 		
 	}
 }
@@ -214,12 +428,11 @@ function mouseUp() {
 function mouseMove(e) {
 	if (drag) {
 	
-		//getJoueur(e);
 		
-		if (joueurSelect === null) return;
+		if (joueurSelect === null || joueurSelect.id < 0) return;
 		
-		var posX = e.pageX - canvas.offsetLeft;
-		var posY = e.pageY - canvas.offsetTop;
+		var posX = e.pageX - container.offsetLeft;
+		var posY = e.pageY - container.offsetTop;
 
 
 		dragX = posX - relativeX;
@@ -238,11 +451,8 @@ function mouseOut(e) {
 
 function mouseScroll(e) {
 	
-	//if (drag) {
+	setTime(100*Math.floor(t/100) + 100*-e.deltaY/3);
 		
-		setTime(t + 10*e.deltaY);
-		
-	//}
 }
 
 canvas.addEventListener('mousedown', mouseDown, false);
@@ -252,32 +462,37 @@ canvas.addEventListener('mouseout', mouseOut, false);
 canvas.addEventListener('wheel', mouseScroll, false);
 
 function parseFile(fileContent) {
-	totalTime = 0;
-	console.log(totalTime);
 	var content = JSON.parse(fileContent);
-	var max = 0
-	for (var i = 0; i < 5; i++) {
-		for (var j=0; j<content.joueurs[i].vecteurs.length; j++){
-			totalTime += content.joueurs[0].vecteurs[j].t;
-		}
-		for (var y=0; y<content.joueurs[i].vecteurs.length; y++){
-			var wesh = content.joueurs[i].vecteurs[y].t;
-			if (max < wesh){
-				max = wesh;
-				
-			}
-		}
-		joueurs[i] = new Joueur(content.joueurs[i].x*canvas.width, content.joueurs[i].y*canvas.height, i, "joueur"+(i+1)+".png", content.joueurs[i].vecteurs);
+	setMaxTime(content.maxTime);
+	for (var i = 0; i < content.joueurs.length; i++) {
+		
+		joueurs[i] = new Joueur(content.joueurs[i].x, content.joueurs[i].y, i, "images/joueur"+(i+1)+".png", content.joueurs[i].vecteurs);
 		
 	}
-	console.log(totalTime);
-	console.log(max);
-	canvas.draw();
+	
+	ballonTimeline = content.ballonTimeline;
+	
+	joueurs[CENTRE] = new Joueur(canvas.width/2, canvas.height/2, CENTRE, "", []);
+	joueurs[CENTRE].width = 100;
+	joueurs[CENTRE].height = 100;
+	
+	joueurs[PANIER_GAUCHE] = new Joueur(canvas.width*0.06379, canvas.height/2, PANIER_GAUCHE, "", []);
+	joueurs[PANIER_GAUCHE].width = 100;
+	joueurs[PANIER_GAUCHE].height = 100;
+	
+	joueurs[PANIER_DROIT] = new Joueur(canvas.width*0.9367, canvas.height/2, PANIER_DROIT, "", []);
+	joueurs[PANIER_DROIT].width = 100;
+	joueurs[PANIER_DROIT].height = 100;
+	
+	joueurBallon = joueurs[CENTRE];
+	
+	setTime(0);
+	//canvas.draw();
 
 }
 
-//Sauvegarde par défaut
-parseFile('{"joueurs":[{"x":0.08,"y":0.23,"vecteurs":[{"x":0.13,"y":0,"t":2000},{"x":0,"y":0.5,"t":5000}]},{"x":0.23,"y":0.15,"vecteurs":[{"x":0.13,"y":0.15,"t":2500},{"x":0.3,"y":0.5,"t":5000}]},{"x":0.30,"y":0.43,"vecteurs":[{"x":0.13,"y":0.15,"t":2500},{"x":0.3,"y":0.5,"t":5000}]},{"x":0.23,"y":0.65,"vecteurs":[{"x":0.13,"y":0.15,"t":2500},{"x":0.3,"y":0.5,"t":5000}]},{"x":0.05,"y":0.70,"vecteurs":[{"x":0.13,"y":0.15,"t":2500},{"x":0.3,"y":0.5,"t":5000}]}]}');
+//Default save
+parseFile('{"maxTime":10000,"ballonTimeline":[{"joueur":-1,"tStart":0,"tEnd":-1}],"joueurs":[{"xInit":152,"x":152,"yInit":152,"y":152,"id":0,"vecteurs":[],"img":{},"width":101,"height":101},{"xInit":344,"x":344,"yInit":158,"y":158,"id":1,"vecteurs":[],"img":{},"width":101,"height":101},{"xInit":434,"x":434,"yInit":359,"y":359,"id":2,"vecteurs":[],"img":{},"width":101,"height":101},{"xInit":344,"x":344,"yInit":518,"y":518,"id":3,"vecteurs":[],"img":{},"width":101,"height":101},{"xInit":114,"x":114,"yInit":554,"y":554,"id":4,"vecteurs":[],"img":{},"width":101,"height":101},{"xInit":1127,"x":1127,"yInit":152,"y":152,"id":5,"vecteurs":[],"img":{},"width":101,"height":101},{"xInit":935,"x":935,"yInit":158,"y":158,"id":6,"vecteurs":[],"img":{},"width":101,"height":101},{"xInit":845,"x":845,"yInit":359,"y":359,"id":7,"vecteurs":[],"img":{},"width":101,"height":101},{"xInit":935,"x":935,"yInit":518,"y":518,"id":8,"vecteurs":[],"img":{},"width":101,"height":101},{"xInit":1165,"x":1165,"yInit":554,"y":554,"id":9,"vecteurs":[],"img":{},"width":101,"height":101}]}');
 
 function uploadFile() {
 	//console.log("upload file");
@@ -308,38 +523,42 @@ async function toggleAnimation(){
 		 playLabel.textContent = "Play";
 		 play = false;
 	 }
+	 
+	canvas.draw();
 }
 
 
 //Cette fonction altère les coordonnées x et y du joueur en fonction de t.
-function calcCoordsJoueur(joueur) {
+function calcCoordsJoueur(joueur, t) {
 	var temp = t;
 	var i = 0;
 	//console.log(joueur);
-	joueur.x = joueur.xInit;
-	joueur.y = joueur.yInit;
+	var coords = {};
+	coords.x = joueur.xInit;
+	coords.y = joueur.yInit;
 	while (joueur.vecteurs[i] !== undefined) {
 
 		if (temp >= joueur.vecteurs[i].t) {
 
-			joueur.x += joueur.vecteurs[i].x*canvas.width;
-			joueur.y += joueur.vecteurs[i].y*canvas.height;
+			coords.x += joueur.vecteurs[i].x;
+			coords.y += joueur.vecteurs[i].y;
 			temp -= joueur.vecteurs[i].t;
 			i++;
 
 		} else {
 			
-			joueur.x += (joueur.vecteurs[i].x*canvas.width/joueur.vecteurs[i].t)*temp; 
-			joueur.y += (joueur.vecteurs[i].y*canvas.height/joueur.vecteurs[i].t)*temp;
-			return;
+			coords.x += (joueur.vecteurs[i].x/joueur.vecteurs[i].t)*temp; 
+			coords.y += (joueur.vecteurs[i].y/joueur.vecteurs[i].t)*temp;
+			return coords;
 		}
 	}
+	return coords;
 }
 
 async function playAnimation(){
 	var step = 24;
 	while(play) {
-		setTime(t+step);
+		setTime(t+step*vitesse);
 		await sleep(step);
 		/*if (t>10000){
 			t=10000;
@@ -397,6 +616,20 @@ function download(strData, strFileName, strMimeType) {
 }
 
 function exportFile() {
-	download(JSON.stringify(save), "Dyson.bskt", "text/plain");
+	
+	var save = {};
+	save.maxTime = maxTime;
+	save.ballonTimeline = ballonTimeline;
+	save.joueurs = joueurs;
+	
+	download(JSON.stringify(save, null, 4), "Schema.bskt", "text/plain");
 
+}
+
+window.onload = function() {
+	for (var i = 0; i < joueurs.length; i++) {
+		joueurs[i].width = joueurs[i].img.width;
+		joueurs[i].height = joueurs[i].img.height;
+	}
+	canvas.draw();
 }
