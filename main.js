@@ -33,6 +33,12 @@ var ballonTimeline = [];
 
 var joueurs = [];
 
+//Only firefox is supported
+if(!(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)){
+    alert("Merci d'utiliser Mozilla Firefox. Les autres navigateurs ne sont pas supportés.");
+	window.close();
+}
+
 canvas.onload = function() {
 	//console.log("bit loaded");
 	//context.drawImage(basketCourt, 0, 0, canvas.width, canvas.height);
